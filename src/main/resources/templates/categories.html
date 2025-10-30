@@ -30,6 +30,11 @@
         Enter new category
     </h3>
 
+    <div th:if="${error != null}">
+        <p th:text="${error}" style="color: red;"></p>
+    </div>
+
+
     <form th:action="@{/servlet/category}" th:method="POST">
         <label>
             Name

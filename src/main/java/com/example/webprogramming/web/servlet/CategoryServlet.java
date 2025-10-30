@@ -1,29 +1,26 @@
 package com.example.webprogramming.web.servlet;
 
+import com.example.webprogramming.service.CategoryService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(name = "category-servlet", urlPatterns = "/servlet/category")
 public class CategoryServlet extends HttpServlet {
     private final SpringTemplateEngine springTemplateEngine;
-    private final List<Category> categories = new ArrayList<>();
+    private final CategoryService categoryService;
 
-    public CategoryServlet(SpringTemplateEngine springTemplateEngine) {
+    public CategoryServlet(SpringTemplateEngine springTemplateEngine, CategoryService categoryService) {
         this.springTemplateEngine = springTemplateEngine;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -37,7 +34,8 @@ public class CategoryServlet extends HttpServlet {
         WebContext context = new WebContext(webExchange);
         context.setVariable("ipAddress", req.getRemoteAddr());
         context.setVariable("userAgent", req.getHeader("user-agent"));
-        context.setVariable("categories", categories);
+        context.setVariable("errorMessage", req.getHeader("errorMessage"));
+        context.setVariable("categories", this.categoryService.listCategories());
 
         springTemplateEngine.process("categories.html", context, resp.getWriter());
     }
@@ -48,20 +46,12 @@ public class CategoryServlet extends HttpServlet {
 
         String name = req.getParameter("name");
         String description = req.getParameter("description");
-        categories.add(new Category(name, description));
-        resp.sendRedirect("/servlet/category");
-    }
-
-    @Getter
-    @Setter
-//    @AllArgsConstructor
-    static class Category {
-        private String name;
-        private String description;
-
-        public Category(String name, String description) {
-            this.name = name;
-            this.description = description;
+        try {
+            this.categoryService.create(name, description);
+        } catch (IllegalArgumentException e) {
+            resp.sendRedirect("/servlet/category?errorMessage=Invalid input for category");
+            return;
         }
+        resp.sendRedirect("/servlet/category");
     }
 }
