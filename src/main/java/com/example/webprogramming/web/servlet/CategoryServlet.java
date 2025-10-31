@@ -37,6 +37,11 @@ public class CategoryServlet extends HttpServlet {
         context.setVariable("errorMessage", req.getHeader("errorMessage"));
         context.setVariable("categories", this.categoryService.listCategories());
 
+        // added because of Context Listener
+        Integer userViews = (Integer) getServletContext().getAttribute("userViews");
+        getServletContext().setAttribute("userViews", userViews + 1);
+        context.setVariable("userViews", userViews);
+        //
         springTemplateEngine.process("categories.html", context, resp.getWriter());
     }
 

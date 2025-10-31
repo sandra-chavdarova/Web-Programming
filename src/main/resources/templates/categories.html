@@ -17,6 +17,21 @@
     <th:block th:text="'User Agent: ' + ${userAgent}"/>
 </p>
 
+<th:block>
+    <div th:text="${userViews?:0}"></div>
+</th:block>
+
+<th:block th:if="${session.user}">
+    <h2>Info about user</h2>
+    <div th:text="${session.user.username}"></div>
+    <div th:text="${session.user.name}"></div>
+    <div th:text="${session.user.surname}"></div>
+
+    <div>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</th:block>
+
 <h3>
     Categories:
 </h3>
@@ -33,7 +48,6 @@
     <div th:if="${error != null}">
         <p th:text="${error}" style="color: red;"></p>
     </div>
-
 
     <form th:action="@{/servlet/category}" th:method="POST">
         <label>
