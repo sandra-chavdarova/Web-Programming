@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dish Form</title>
+    <style>
+        div {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Dish Form</h1>
+</header>
+
+<!-- Add new dish form -->
+<form th:if="${dish == null}" th:action="@{/dishes/add}" method="post">
+    <div>
+        <label>Dish ID:</label>
+        <input type="text" name="dishId"/>
+    </div>
+    <div>
+        <label>Name:</label>
+        <input type="text" name="name"/>
+    </div>
+    <div>
+        <label>Cuisine:</label>
+        <input type="text" name="cuisine"/>
+    </div>
+    <div>
+        <label>Preparation Time:</label>
+        <input type="number" name="preparationTime"/>
+    </div>
+    <div>
+        <button type="submit">Save</button>
+    </div>
+</form>
+
+<!-- Edit existing dish form -->
+<form th:if="${dish != null}" th:action="@{/dishes/edit/{id}(id=${dish.id})}" method="post">
+    <div>
+        <label>Dish ID:</label>
+        <input type="hidden" name="id" th:value="${dish.id}"/>
+        <input type="text" name="dishId" th:value="${dish.dishId}"/>
+    </div>
+    <div>
+        <label>Name:</label>
+        <input type="text" name="name" th:value="${dish.name}"/>
+    </div>
+    <div>
+        <label>Cuisine:</label>
+        <input type="text" name="cuisine" th:value="${dish.cuisine}"/>
+    </div>
+    <div>
+        <label>Preparation Time:</label>
+        <input type="text" name="preparationTime" th:value="${dish.preparationTime}"/>
+    </div>
+    <div>
+        <button type="submit">Save</button>
+    </div>
+</form>
+
+</body>
+</html>
