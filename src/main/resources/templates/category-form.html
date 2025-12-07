@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Category Form</title>
+</head>
+<body>
+<form method="post" th:action="@{${category != null} ? '/categories/' + ${category.id} : '/categories'}">
+    <div>
+        <label for="name">Category Name</label>
+        <input type="text"
+               id="name"
+               name="name"
+               th:value="${category != null ? category.name : ''}"
+               required>
+    </div>
+
+    <div>
+        <label for="description">Description</label>
+        <input type="text"
+               id="description"
+               name="description"
+               th:value="${category != null ? category.description : ''}"
+               required>
+    </div>
+
+    <button id="submit" type="submit">Submit</button>
+    <a id="back" href="/categories" type="button" class="btn btn-primary">Back to Categories</a>
+</form>
+
+<div>
+    <ul id="nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+</body>
+</html>

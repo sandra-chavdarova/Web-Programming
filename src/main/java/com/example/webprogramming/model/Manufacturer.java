@@ -1,20 +1,18 @@
 package com.example.webprogramming.model;
 
-import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Category {
+public class Manufacturer {
     private Long id;
     private String name;
-    private String description;
+    private String address;
 
-    public Category(String name, String description) {
+    public Manufacturer(String name, String address) {
         this.id = (long) (Math.random() * 1000);
         this.name = name;
-        this.description = description;
+        this.address = address;
     }
 }
-
-

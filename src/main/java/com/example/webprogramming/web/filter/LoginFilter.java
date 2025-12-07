@@ -1,4 +1,4 @@
-package com.example.webprogramming.web.servlet.filter;
+package com.example.webprogramming.web.filter;
 
 import com.example.webprogramming.model.User;
 import jakarta.servlet.*;

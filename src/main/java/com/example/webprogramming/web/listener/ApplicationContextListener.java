@@ -1,4 +1,4 @@
-package com.example.webprogramming.web.servlet.listener;
+package com.example.webprogramming.web.listener;
 
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;

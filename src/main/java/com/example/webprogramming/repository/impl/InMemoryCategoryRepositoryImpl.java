@@ -11,8 +11,13 @@ import java.util.Optional;
 @Repository
 public class InMemoryCategoryRepositoryImpl implements CategoryRepository {
     @Override
+    public Optional<Category> findById(Long id) {
+        return DataHolder.categories.stream().filter(c -> c.getId().equals(id)).findFirst();
+    }
+
+    @Override
     public Category save(Category category) {
-        DataHolder.categories.removeIf(c -> c.getName().equals(category.getName()));
+        delete(category.getId());
         DataHolder.categories.add(category);
         return category;
     }
@@ -36,4 +41,10 @@ public class InMemoryCategoryRepositoryImpl implements CategoryRepository {
     public void delete(String name) {
         DataHolder.categories.removeIf(c -> c.getName().equals(name));
     }
+
+    @Override
+    public void delete(Long id) {
+        DataHolder.categories.removeIf(c -> c.getId().equals(id));
+    }
+
 }
