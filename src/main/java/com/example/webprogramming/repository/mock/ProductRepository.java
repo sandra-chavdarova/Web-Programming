@@ -1,4 +1,4 @@
-package com.example.webprogramming.repository;
+package com.example.webprogramming.repository.mock;
 
 import com.example.webprogramming.model.Product;
 

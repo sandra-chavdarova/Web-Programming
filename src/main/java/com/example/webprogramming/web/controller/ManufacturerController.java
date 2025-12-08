@@ -11,46 +11,64 @@ import java.util.List;
 @Controller
 @RequestMapping("/manufacturers")
 public class ManufacturerController {
+
     private final ManufacturerService manufacturerService;
 
     public ManufacturerController(ManufacturerService manufacturerService) {
         this.manufacturerService = manufacturerService;
     }
 
-    @GetMapping
-    public String getManufacturerPage(@RequestParam(required = false) String error, Model model) {
-        if (error != null)
+    @GetMapping()
+    public String getProductPage(
+            @RequestParam(required = false) String error,
+            Model model
+    ) {
+        if (error != null) {
             model.addAttribute("error", error);
+        }
+
         List<Manufacturer> manufacturers = manufacturerService.listManufacturers();
+
         model.addAttribute("manufacturers", manufacturers);
-        return "manufacturers";
+        model.addAttribute("bodyContent", "manufacturers");
+        return "master-template";
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteManufacturer(@PathVariable Long id) {
+    public String deleteProduct(@PathVariable Long id) {
         manufacturerService.delete(id);
         return "redirect:/manufacturers";
     }
 
+
     @GetMapping("/edit-form/{id}")
-    public String editManufacturerPage(@PathVariable Long id, Model model) {
+    public String editProductPage(@PathVariable Long id, Model model) {
         model.addAttribute("manufacturer", manufacturerService.findById(id));
-        return "manufacturer-form";
+        model.addAttribute("bodyContent", "manufacturer-form");
+        return "master-template";
     }
 
     @GetMapping("/add-form")
-    public String addManufacturerPage() {
-        return "manufacturer-form";
+    public String addProductPage(Model model) {
+        model.addAttribute("bodyContent", "manufacturer-form");
+        return "master-template";
     }
 
     @PostMapping
-    public String saveManufacturer(@RequestParam String name, @RequestParam String address) {
+    public String saveProduct(
+            @RequestParam String name,
+            @RequestParam String address
+    ) {
         manufacturerService.create(name, address);
         return "redirect:/manufacturers";
     }
 
     @PostMapping("/{id}")
-    public String updateManufacturer(@PathVariable Long id, @RequestParam String name, @RequestParam String address) {
+    public String updateProduct(
+            @PathVariable Long id,
+            @RequestParam String name,
+            @RequestParam String address
+    ) {
         manufacturerService.update(id, name, address);
         return "redirect:/manufacturers";
     }

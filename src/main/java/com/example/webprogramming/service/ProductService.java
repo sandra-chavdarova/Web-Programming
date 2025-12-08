@@ -17,4 +17,6 @@ public interface ProductService {
     List<Product> search(String text);
 
     void delete(Long id);
+
+    void toggleProductStatus(Long id);
 }

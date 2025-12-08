@@ -4,7 +4,7 @@ import com.example.webprogramming.model.User;
 import com.example.webprogramming.model.exceptions.InvalidArgumentsException;
 import com.example.webprogramming.model.exceptions.InvalidUserCredentialsException;
 import com.example.webprogramming.model.exceptions.PasswordsDoNotMatchException;
-import com.example.webprogramming.repository.UserRepository;
+import com.example.webprogramming.repository.jpa.UserRepository;
 import com.example.webprogramming.service.AuthService;
 import org.springframework.stereotype.Service;
 

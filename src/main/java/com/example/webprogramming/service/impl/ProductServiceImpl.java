@@ -5,7 +5,7 @@ import com.example.webprogramming.model.Manufacturer;
 import com.example.webprogramming.model.Product;
 import com.example.webprogramming.model.enums.ProductLevel;
 import com.example.webprogramming.model.exceptions.ProductNotFoundException;
-import com.example.webprogramming.repository.ProductRepository;
+import com.example.webprogramming.repository.jpa.ProductRepository;
 import com.example.webprogramming.service.CategoryService;
 import com.example.webprogramming.service.ManufacturerService;
 import com.example.webprogramming.service.ProductService;
@@ -59,11 +59,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> search(String text) {
-        return productRepository.search(text);
+        return productRepository.findByNameContainingIgnoreCase(text);
     }
 
     @Override
     public void delete(Long id) {
-        productRepository.delete(id);
+        productRepository.deleteById(id);
+    }
+
+    @Override
+    public void toggleProductStatus(Long id) {
+        Product product = findById(id);
+        product.setActive(!product.isActive());
+        productRepository.save(product);
     }
 }

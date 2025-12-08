@@ -1,8 +1,8 @@
-package com.example.webprogramming.repository.impl;
+package com.example.webprogramming.repository.mock.impl;
 
 import com.example.webprogramming.bootstrap.DataHolder;
 import com.example.webprogramming.model.User;
-import com.example.webprogramming.repository.UserRepository;
+import com.example.webprogramming.repository.mock.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

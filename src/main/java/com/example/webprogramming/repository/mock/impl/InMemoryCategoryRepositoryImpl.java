@@ -1,8 +1,8 @@
-package com.example.webprogramming.repository.impl;
+package com.example.webprogramming.repository.mock.impl;
 
 import com.example.webprogramming.bootstrap.DataHolder;
 import com.example.webprogramming.model.Category;
-import com.example.webprogramming.repository.CategoryRepository;
+import com.example.webprogramming.repository.mock.CategoryRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -46,5 +46,4 @@ public class InMemoryCategoryRepositoryImpl implements CategoryRepository {
     public void delete(Long id) {
         DataHolder.categories.removeIf(c -> c.getId().equals(id));
     }
-
 }

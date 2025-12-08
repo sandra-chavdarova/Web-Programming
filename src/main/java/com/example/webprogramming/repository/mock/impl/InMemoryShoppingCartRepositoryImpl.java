@@ -1,9 +1,9 @@
-package com.example.webprogramming.repository.impl;
+package com.example.webprogramming.repository.mock.impl;
 
 import com.example.webprogramming.bootstrap.DataHolder;
 import com.example.webprogramming.model.ShoppingCart;
 import com.example.webprogramming.model.enums.ShoppingCartStatus;
-import com.example.webprogramming.repository.ShoppingCartRepository;
+import com.example.webprogramming.repository.mock.ShoppingCartRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

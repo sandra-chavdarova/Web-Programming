@@ -2,7 +2,7 @@ package com.example.webprogramming.service.impl;
 
 import com.example.webprogramming.model.Manufacturer;
 import com.example.webprogramming.model.exceptions.ManufacturerNotFoundException;
-import com.example.webprogramming.repository.ManufacturerRepository;
+import com.example.webprogramming.repository.jpa.ManufacturerRepository;
 import com.example.webprogramming.service.ManufacturerService;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +49,11 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 
     @Override
     public void delete(Long id) {
-        manufacturerRepository.delete(id);
+        manufacturerRepository.deleteById(id);
     }
 
     @Override
     public List<Manufacturer> searchManufacturers(String text) {
-        return manufacturerRepository.search(text);
+        return manufacturerRepository.findByNameContainingIgnoreCase(text);
     }
 }

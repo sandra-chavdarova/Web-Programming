@@ -13,8 +13,6 @@ public interface CategoryService {
 
     Category update(Long id, String name, String description);
 
-    void delete(String name);
-
     void delete(Long id);
 
     List<Category> searchCategories(String text);

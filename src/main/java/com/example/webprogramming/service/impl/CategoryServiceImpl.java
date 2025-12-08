@@ -2,12 +2,11 @@ package com.example.webprogramming.service.impl;
 
 import com.example.webprogramming.model.Category;
 import com.example.webprogramming.model.exceptions.CategoryNotFoundException;
-import com.example.webprogramming.repository.CategoryRepository;
+import com.example.webprogramming.repository.jpa.CategoryRepository;
 import com.example.webprogramming.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -46,17 +45,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(String name) {
-        this.categoryRepository.delete(name);
-    }
-
-    @Override
     public void delete(Long id) {
-        this.categoryRepository.delete(id);
+        this.categoryRepository.deleteById(id);
     }
 
     @Override
     public List<Category> searchCategories(String text) {
-        return this.categoryRepository.search(text);
+        return this.categoryRepository.findAllByNameContainingIgnoreCaseOrDescriptionLikeIgnoreCase(text, text);
     }
 }

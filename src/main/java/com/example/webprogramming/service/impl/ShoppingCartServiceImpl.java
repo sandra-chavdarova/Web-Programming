@@ -7,8 +7,8 @@ import com.example.webprogramming.model.enums.ShoppingCartStatus;
 import com.example.webprogramming.model.exceptions.ProductAlreadyInShoppingCartException;
 import com.example.webprogramming.model.exceptions.ShoppingCartNotFoundException;
 import com.example.webprogramming.model.exceptions.UserNotFoundException;
-import com.example.webprogramming.repository.ShoppingCartRepository;
-import com.example.webprogramming.repository.UserRepository;
+import com.example.webprogramming.repository.jpa.ShoppingCartRepository;
+import com.example.webprogramming.repository.jpa.UserRepository;
 import com.example.webprogramming.service.ProductService;
 import com.example.webprogramming.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
@@ -36,9 +36,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCart getActiveShoppingCart(String username) {
-        return this.shoppingCartRepository.findByUsernameAndStatus(username, ShoppingCartStatus.CREATED)
+        User user = userRepository.findByUsernameIgnoreCase(username).orElseThrow(() -> new UserNotFoundException(username));
+        return this.shoppingCartRepository.findByUserAndStatus(user, ShoppingCartStatus.CREATED)
                 .orElseGet(() -> {
-                    User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
                     ShoppingCart shoppingCart = new ShoppingCart(user);
                     return this.shoppingCartRepository.save(shoppingCart);
                 });
