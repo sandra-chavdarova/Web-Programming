@@ -1,6 +1,6 @@
-package mk.ukim.finki.wp.lab.service;
+package mk.ukim.finki.wp.lab3.service;
 
-import mk.ukim.finki.wp.lab.model.Chef;
+import mk.ukim.finki.wp.lab3.model.Chef;
 
 import java.util.List;
 

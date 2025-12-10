@@ -1,6 +1,6 @@
-package mk.ukim.finki.wp.lab.web.controller;
+package mk.ukim.finki.wp.lab3.web.controller;
 
-import mk.ukim.finki.wp.lab.service.ChefService;
+import mk.ukim.finki.wp.lab3.service.ChefService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

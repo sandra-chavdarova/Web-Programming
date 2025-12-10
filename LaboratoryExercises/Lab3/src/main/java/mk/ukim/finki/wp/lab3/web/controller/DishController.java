@@ -1,8 +1,8 @@
-package mk.ukim.finki.wp.lab.web.controller;
+package mk.ukim.finki.wp.lab3.web.controller;
 
-import mk.ukim.finki.wp.lab.model.Dish;
-import mk.ukim.finki.wp.lab.service.ChefService;
-import mk.ukim.finki.wp.lab.service.DishService;
+import mk.ukim.finki.wp.lab3.model.Dish;
+import mk.ukim.finki.wp.lab3.service.ChefService;
+import mk.ukim.finki.wp.lab3.service.DishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +27,19 @@ public class DishController {
         }
         List<Dish> dishes = dishService.listDishes();
         model.addAttribute("dishes", dishes);
+        model.addAttribute("chefs", chefService.listChefs());
         return "listDishes";
     }
 
     @GetMapping("/dish-form")
     public String getAddDishPage(Model model) {
+        model.addAttribute("chefs", chefService.listChefs());
         return "dish-form";
     }
 
     @PostMapping("/add")
-    public String saveDish(@RequestParam String dishId, @RequestParam String name, @RequestParam String cuisine, @RequestParam int preparationTime) {
-        dishService.create(dishId, name, cuisine, preparationTime);
+    public String saveDish(@RequestParam String dishId, @RequestParam String name, @RequestParam String cuisine, @RequestParam int preparationTime, @RequestParam Long chefId) {
+        dishService.create(dishId, name, cuisine, preparationTime, chefId);
         return "redirect:/dishes";
     }
 
@@ -68,5 +70,19 @@ public class DishController {
         }
         chefService.addDishToChef(chefId, dish.getDishId());
         return "redirect:/chefDetails";
+    }
+
+    @PostMapping
+    public String searchBooksByAuthor(@RequestParam(name = "chefId", required = false) Long chefId, Model model) {
+        List<Dish> dishes;
+        if (chefId == null) {
+            dishes = dishService.listDishes();
+        } else {
+            dishes = dishService.dishesCookedByChef(chefId);
+        }
+        model.addAttribute("dishes", dishes);
+        model.addAttribute("chefs", chefService.listChefs());
+        model.addAttribute("selectedChefId", chefId);
+        return "listDishes";
     }
 }

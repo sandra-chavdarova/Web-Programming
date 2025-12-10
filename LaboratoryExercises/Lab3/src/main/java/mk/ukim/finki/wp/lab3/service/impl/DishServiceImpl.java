@@ -1,8 +1,10 @@
-package mk.ukim.finki.wp.lab.service.impl;
+package mk.ukim.finki.wp.lab3.service.impl;
 
-import mk.ukim.finki.wp.lab.model.Dish;
-import mk.ukim.finki.wp.lab.repository.DishRepository;
-import mk.ukim.finki.wp.lab.service.DishService;
+import mk.ukim.finki.wp.lab3.model.Chef;
+import mk.ukim.finki.wp.lab3.model.Dish;
+import mk.ukim.finki.wp.lab3.repository.jpa.ChefRepository;
+import mk.ukim.finki.wp.lab3.repository.jpa.DishRepository;
+import mk.ukim.finki.wp.lab3.service.DishService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +12,11 @@ import java.util.List;
 @Service
 public class DishServiceImpl implements DishService {
     private final DishRepository dishRepository;
+    private final ChefRepository chefRepository;
 
-    public DishServiceImpl(DishRepository dishRepository) {
+    public DishServiceImpl(DishRepository dishRepository, ChefRepository chefRepository) {
         this.dishRepository = dishRepository;
+        this.chefRepository = chefRepository;
     }
 
     @Override
@@ -22,7 +26,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public Dish findByDishId(String dishId) {
-        return dishRepository.findByDishId(dishId);
+        return dishRepository.findDishByDishId(dishId);
     }
 
     @Override
@@ -31,8 +35,9 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public Dish create(String dishId, String name, String cuisine, int preparationTime) {
-        return dishRepository.save(new Dish(dishId, name, cuisine, preparationTime));
+    public Dish create(String dishId, String name, String cuisine, int preparationTime, Long chefId) {
+        Chef chef = chefRepository.findById(chefId).orElse(null);
+        return dishRepository.save(new Dish(dishId, name, cuisine, preparationTime, chef));
     }
 
     @Override
@@ -51,5 +56,10 @@ public class DishServiceImpl implements DishService {
     @Override
     public void delete(Long id) {
         dishRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Dish> dishesCookedByChef(Long chefId) {
+        return dishRepository.findAllByChef_Id(chefId);
     }
 }

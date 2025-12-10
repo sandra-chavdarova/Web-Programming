@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Dishes</title>
+    <style>
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .actions button, .actions a {
+            margin-right: 5px;
+            padding: 10px;
+            font-size: 13px;
+            width: 70px;
+        }
+
+        .add-dish-btn {
+            margin-top: 20px;
+            padding: 7px 15px;
+            font-size: 14px;
+            width: 200px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        select{
+            height: 30px;
+            width: 160px;
+            text-align: center;
+        }
+        #search button{
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Dishes</h1>
+</header>
+
+<form id="search" action="/dishes" method="POST">
+    <h3>Select a chef</h3>
+    <select id="chefId" name="chefId">
+        <option value="">All chefs</option>
+        <option
+                th:each="chef : ${chefs}"
+                th:value="${chef.id}"
+                th:text="${chef.firstName + ' ' + chef.lastName}"
+                th:selected="${selectedChefId != null && selectedChefId==chef.id}">
+        </option>
+    </select>
+    <button type="submit">Search</button>
+</form>
+
+<div th:if="${dishes.size() > 0}">
+    <table>
+        <thead>
+        <tr>
+            <th>Dish ID</th>
+            <th>Name</th>
+            <th>Cuisine</th>
+            <th>Preparation Time</th>
+            <th>Chef</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dish : ${dishes}">
+            <td th:text="${dish.dishId}"></td>
+            <td th:text="${dish.name}"></td>
+            <td th:text="${dish.cuisine}"></td>
+            <td th:text="${dish.preparationTime + ' min'}"></td>
+            <td th:text="${dish.chef != null ? dish.chef.firstName + ' ' + dish.chef.lastName : 'No chef'}"></td>
+
+            <td class="actions">
+                <!-- Edit -->
+                <button>
+                    <a th:href="@{/dishes/dish-form/{id}(id=${dish.id})}" class="edit-btn">Edit</a>
+                </button>
+                <!-- Delete -->
+                <form th:action="@{/dishes/delete/{id}(id=${dish.id})}" method="post" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:if="${dishes.size() == 0}">
+    <p>No dishes available.</p>
+</div>
+
+<!-- Add new dish button -->
+<div>
+    <button class="add-dish-btn">
+        <a th:href="@{/dishes/dish-form}">Add New Dish</a>
+    </button>
+</div>
+
+</body>
+</html>

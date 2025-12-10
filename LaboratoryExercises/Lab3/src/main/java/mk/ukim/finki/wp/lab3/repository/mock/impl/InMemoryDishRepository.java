@@ -1,8 +1,8 @@
-package mk.ukim.finki.wp.lab.repository.impl;
+package mk.ukim.finki.wp.lab3.repository.mock.impl;
 
-import mk.ukim.finki.wp.lab.bootstrap.DataHolder;
-import mk.ukim.finki.wp.lab.model.Dish;
-import mk.ukim.finki.wp.lab.repository.DishRepository;
+import mk.ukim.finki.wp.lab3.bootstrap.DataHolder;
+import mk.ukim.finki.wp.lab3.model.Dish;
+import mk.ukim.finki.wp.lab3.repository.mock.DishRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

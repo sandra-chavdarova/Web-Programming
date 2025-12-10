@@ -1,11 +1,14 @@
-package mk.ukim.finki.wp.lab.web.controller;
+package mk.ukim.finki.wp.lab3.web.controller;
 
-import mk.ukim.finki.wp.lab.model.Chef;
-import mk.ukim.finki.wp.lab.service.ChefService;
-import mk.ukim.finki.wp.lab.service.DishService;
+import mk.ukim.finki.wp.lab3.model.Chef;
+import mk.ukim.finki.wp.lab3.service.ChefService;
+import mk.ukim.finki.wp.lab3.service.DishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/dish")
