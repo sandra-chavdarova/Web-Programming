@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Dishes</title>
+    <style>
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Calibri, sans-serif;
+            font-size: 18px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            width: 350px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+        }
+
+        button {
+            width: 100px;
+            height: 30px;
+            text-align: center;
+            vertical-align: center;
+            font-size: 18px;
+        }
+
+        .actions button, .actions a {
+            margin-right: 5px;
+            padding: 10px;
+            font-size: 13px;
+            width: 70px;
+        }
+
+        .add-dish-btn {
+            margin-top: 20px;
+            padding: 7px 15px;
+            font-size: 14px;
+            width: 200px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+        }
+
+        select {
+            height: 30px;
+            width: 160px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        #search button {
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Dishes</h1>
+</header>
+<div style="margin-bottom: 20px;">
+
+    <a th:href="@{/login}" sec:authorize="!isAuthenticated()">
+        <button>Login</button>
+    </a>
+
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+        <button type="submit">Logout</button>
+    </form>
+
+</div>
+<form id="search" action="/dishes" method="POST">
+    <h3>Select a chef</h3>
+    <select id="chefId" name="chefId">
+        <option value="">All chefs</option>
+        <option
+                th:each="chef : ${chefs}"
+                th:value="${chef.id}"
+                th:text="${chef.firstName + ' ' + chef.lastName}"
+                th:selected="${selectedChefId != null && selectedChefId==chef.id}">
+        </option>
+    </select>
+    <button type="submit">Search</button>
+</form>
+
+<div th:if="${dishes.size() > 0}">
+    <table>
+        <thead>
+        <tr>
+            <th>Dish ID</th>
+            <th>Name</th>
+            <th>Cuisine</th>
+            <th>Preparation Time</th>
+            <th>Chef</th>
+            <th sec:authorize="hasRole('ADMIN')">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dish : ${dishes}">
+            <td th:text="${dish.dishId}"></td>
+            <td th:text="${dish.name}"></td>
+            <td th:text="${dish.cuisine}"></td>
+            <td th:text="${dish.preparationTime + ' min'}"></td>
+            <td th:text="${dish.chef != null ? dish.chef.firstName + ' ' + dish.chef.lastName : 'No chef'}"></td>
+
+            <td class="actions" sec:authorize="hasRole('ADMIN')">
+                <!-- Edit -->
+                <div>
+                    <button>
+                        <a th:href="@{/dishes/dish-form/{id}(id=${dish.id})}">Edit</a>
+                    </button>
+                </div>
+                <!-- Delete -->
+                <div>
+                    <form th:action="@{/dishes/delete/{id}(id=${dish.id})}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:if="${dishes.size() == 0}">
+    <p>No dishes available.</p>
+</div>
+
+<!-- Add new dish button -->
+<div>
+    <button class="add-dish-btn" sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/dishes/dish-form}">Add New Dish</a>
+    </button>
+</div>
+
+</body>
+</html>

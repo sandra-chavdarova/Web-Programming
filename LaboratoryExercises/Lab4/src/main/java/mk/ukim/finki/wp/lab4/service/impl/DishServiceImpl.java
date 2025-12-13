@@ -1,0 +1,65 @@
+package mk.ukim.finki.wp.lab4.service.impl;
+
+import mk.ukim.finki.wp.lab4.model.Chef;
+import mk.ukim.finki.wp.lab4.model.Dish;
+import mk.ukim.finki.wp.lab4.repository.jpa.ChefRepository;
+import mk.ukim.finki.wp.lab4.repository.jpa.DishRepository;
+import mk.ukim.finki.wp.lab4.service.DishService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class DishServiceImpl implements DishService {
+    private final DishRepository dishRepository;
+    private final ChefRepository chefRepository;
+
+    public DishServiceImpl(DishRepository dishRepository, ChefRepository chefRepository) {
+        this.dishRepository = dishRepository;
+        this.chefRepository = chefRepository;
+    }
+
+    @Override
+    public List<Dish> listDishes() {
+        return dishRepository.findAll();
+    }
+
+    @Override
+    public Dish findByDishId(String dishId) {
+        return dishRepository.findDishByDishId(dishId);
+    }
+
+    @Override
+    public Dish findById(Long id) {
+        return dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
+    }
+
+    @Override
+    public Dish create(String dishId, String name, String cuisine, int preparationTime, Long chefId) {
+        Chef chef = chefRepository.findById(chefId).orElse(null);
+        return dishRepository.save(new Dish(dishId, name, cuisine, preparationTime, chef));
+    }
+
+    @Override
+    public Dish update(Long id, String dishId, String name, String cuisine, int preparationTime) {
+        Dish dish = dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish does not exist"));
+        if (id == null || dishId == null || dishId.isEmpty() || name == null || name.isEmpty() || cuisine == null || cuisine.isEmpty())
+            throw new IllegalArgumentException();
+        dish.setId(id);
+        dish.setDishId(dishId);
+        dish.setName(name);
+        dish.setCuisine(cuisine);
+        dish.setPreparationTime(preparationTime);
+        return dishRepository.save(dish);
+    }
+
+    @Override
+    public void delete(Long id) {
+        dishRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Dish> dishesCookedByChef(Long chefId) {
+        return dishRepository.findAllByChef_Id(chefId);
+    }
+}
