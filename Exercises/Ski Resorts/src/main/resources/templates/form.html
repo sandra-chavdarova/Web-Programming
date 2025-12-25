@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ski Slope Form</title>
+</head>
+<body>
+<!-- The form should submit to SkiSlopeController.create or SkiSlopeController.update,
+     depending on whether we are creating or editing a ski slope -->
+<form method="POST" th:action="@{${skiSlope == null ? '/ski-slopes' : '/ski-slopes/' + skiSlope.getId()}}">
+    <div>
+        <label for="name">Slope Name</label>
+        <input type="text"
+               id="name"
+               name="name"
+               th:value="${skiSlope != null ? skiSlope.name : ''}"
+               required>
+    </div>
+
+    <div>
+        <label for="length">Slope Length (in meters)</label>
+        <input type="number"
+               id="length"
+               name="length"
+               th:value="${skiSlope != null ? skiSlope.length : ''}"
+               required>
+    </div>
+
+    <div>
+        <label for="difficulty">Slope Difficulty</label><br/>
+        <select id="difficulty" name="difficulty" size="5" required>
+            <!-- For each SlopeDifficulty you should have one <option> like below  -->
+            <option th:each="d : ${difficulties}"
+                    th:value="${d}"
+                    th:text="${d}"
+                    th:selected="${skiSlope?.difficulty == d}">[slopeDifficulty]
+            </option>
+        </select>
+    </div>
+
+    <div>
+        <label for="skiResort">Ski Resort</label><br/>
+        <select id="skiResort" name="skiResort" required size="5">
+            <!-- For each ski resort you should have one <option> like below  -->
+            <option th:each="resort : ${resorts}"
+                    th:value="${resort.getId()}"
+                    th:text="${resort.getName()}"
+                    th:selected="${skiSlope != null && skiSlope.skiResort != null && skiSlope.skiResort.id == resort.id}">[location.country], [location.continent]
+            </option>
+        </select>
+    </div>
+
+    <button id="submit" type="submit">Submit</button>
+    <a id="back" href="/ski-slopes" type="button" class="btn btn-primary">Back to Ski Slopes</a>
+</form>
+
+<div>
+    <ul id="nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+</body>
+</html>
