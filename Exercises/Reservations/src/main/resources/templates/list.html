@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>WP Exam</title>
+</head>
+<body>
+
+<div>
+    <!-- The form below should invoke the method ReservationsController.listAll -->
+    <form id="filter-form">
+        <label for="guestName">Guest Name</label>
+        <input id="guestName" type="text" name="guestName" th:value="${guestName}"/>
+        <label for="roomType">Genre</label>
+        <select id="roomType" name="roomType">
+            <option value="">All</option>
+            <!-- For each RoomType you should have one <option> like below  -->
+            <option th:each="type : ${types}"
+                    th:value="${type}"
+                    th:text="${type}"
+                    th:selected="${roomType != null && roomType == type}">[roomName]</option>
+        </select>
+        <select id="hotel" name="hotel">
+            <option value="">All</option>
+            <!-- For each Hotel you should have one <option> like below  -->
+            <option th:each="h : ${hotels}"
+                    th:value="${h.id}"
+                    th:text="${h.name}"
+                    th:selected="${hotel != null && h.id == hotel}">[hotel.name]</option>
+        </select>
+        <button id="filter" type="submit">Filter</button>
+    </form>
+    <div>
+        <!-- ReservationsController.showAdd -->
+        <a sec:authorize="hasRole('ADMIN')" href="/add" class="add-item">
+            Add new reservation
+        </a>
+    </div>
+    <table>
+        <tr>
+            <th>Guest Name</th>
+            <th>Date of Creation</th>
+            <th>Room Type</th>
+            <th>Hotel</th>
+            <th>Days of Stay</th>
+            <th>Actions</th>
+        </tr>
+        <!-- For each reservation you should have one <tr> like below -->
+        <tr th:each="reservation : ${page.getContent()}" class="item">
+            <td th:text="${reservation.guestName}">[reservation.guestName]</td>
+            <td th:text="${reservation.dateCreated}">[reservation.dateCreated]</td>
+            <td th:text="${reservation.roomType}">[reservation.roomType]</td>
+            <td th:text="${reservation.hotel.name}">[reservation.hotel.name]</td>
+            <td th:text="${reservation.daysOfStay}">[reservation.daysOfStay]</td>
+            <td>
+                <!-- ReservationsController.delete -->
+                <form th:action="@{'/delete/{id}' (id=${reservation.getId()})}"
+                      th:method="POST">
+                    <button sec:authorize="hasRole('ADMIN')" type="submit" class="delete-item">Delete</button>
+                </form>
+                <!-- ReservationsController.showEdit -->
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{'/edit/{id}' (id=${reservation.getId()})}" class="edit-item">Edit</a>
+                <!-- ReservationsController.extend -->
+                <form th:action="@{'/extend/{id}' (id=${reservation.getId()})}"
+                      th:method="POST">
+                    <button sec:authorize="hasRole('USER')" type="submit" class="extend-item">Extend stay</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+</div>
+<div>
+    <ul id="nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+</body>
+</html>
